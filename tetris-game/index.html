@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>俄罗斯方块 - 经典游戏</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="game-container">
+    <!-- 开始界面 -->
+    <div class="screen" id="start-screen">
+      <div class="logo">俄罗斯方块</div>
+      <div class="menu">
+        <button class="btn" id="start-btn">开始游戏</button>
+        <button class="btn" id="settings-btn">设置</button>
+        <button class="btn" id="leaderboard-btn">排行榜</button>
+      </div>
+    </div>
+
+    <!-- 游戏主界面 -->
+    <div class="screen hidden" id="game-screen">
+      <div class="game-layout">
+        <!-- 左侧：保存方块显示区 -->
+        <div class="game-sidebar left-sidebar">
+          <div class="hold-piece-container">
+            <div class="sidebar-title">保存</div>
+            <div class="hold-piece" id="hold-piece"></div>
+          </div>
+          <div class="game-stats">
+            <div class="stats-item">
+              <div class="stats-label">等级</div>
+              <div class="stats-value" id="level">1</div>
+            </div>
+            <div class="stats-item">
+              <div class="stats-label">分数</div>
+              <div class="stats-value" id="score">0</div>
+            </div>
+            <div class="stats-item">
+              <div class="stats-label">行数</div>
+              <div class="stats-value" id="lines">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中央：主游戏区 -->
+        <div class="game-board-container">
+          <canvas id="game-board" width="300" height="600"></canvas>
+          <div class="controls-overlay" id="controls-overlay">
+            <button class="control-btn" id="pause-btn">暂停</button>
+            <button class="control-btn" id="menu-btn">菜单</button>
+          </div>
+          <!-- 移动设备控制按钮 -->
+          <div class="touch-controls" id="touch-controls">
+            <button class="touch-btn" id="rotate-btn">旋转</button>
+            <div class="directional-controls">
+              <button class="touch-btn" id="left-btn">←</button>
+              <button class="touch-btn" id="down-btn">↓</button>
+              <button class="touch-btn" id="right-btn">→</button>
+            </div>
+            <button class="touch-btn" id="drop-btn">放置</button>
+            <button class="touch-btn" id="hold-btn">保存</button>
+          </div>
+        </div>
+
+        <!-- 右侧：下一个方块预览区 -->
+        <div class="game-sidebar right-sidebar">
+          <div class="next-pieces-container">
+            <div class="sidebar-title">下一个</div>
+            <div class="next-pieces" id="next-pieces">
+              <!-- 下一个方块将在这里显示 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游戏结束界面 -->
+    <div class="screen hidden" id="game-over-screen">
+      <div class="game-over-container">
+        <h2>游戏结束</h2>
+        <div class="final-stats">
+          <div class="final-score">分数: <span id="final-score">0</span></div>
+          <div class="final-level">等级: <span id="final-level">1</span></div>
+          <div class="final-lines">消除行数: <span id="final-lines">0</span></div>
+        </div>
+        <div class="game-over-buttons">
+          <button class="btn" id="restart-btn">重新开始</button>
+          <button class="btn" id="main-menu-btn">返回主菜单</button>
+        </div>
+        <div class="share-container">
+          <p>分享你的成绩</p>
+          <div class="share-buttons">
+            <button class="share-btn" id="share-wechat">微信</button>
+            <button class="share-btn" id="share-weibo">微博</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设置菜单 -->
+    <div class="screen hidden" id="settings-screen">
+      <div class="settings-container">
+        <h2>游戏设置</h2>
+        <div class="settings-group">
+          <h3>音效</h3>
+          <div class="setting-item">
+            <label for="sound-toggle">音效开关</label>
+            <input type="checkbox" id="sound-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="music-toggle">背景音乐</label>
+            <input type="checkbox" id="music-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="music-select">选择背景音乐</label>
+            <select id="music-select">
+              <option value="classic">经典</option>
+              <option value="remix">电子混音</option>
+              <option value="ambient">环境音</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-group">
+          <h3>游戏设置</h3>
+          <div class="setting-item">
+            <label for="difficulty-select">难度</label>
+            <select id="difficulty-select">
+              <option value="easy">简单</option>
+              <option value="normal" selected>普通</option>
+              <option value="hard">困难</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <label for="theme-select">主题</label>
+            <select id="theme-select">
+              <option value="classic">经典</option>
+              <option value="modern">现代</option>
+              <option value="pixel">像素风</option>
+              <option value="neon">霓虹</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="settings-back-btn">返回</button>
+      </div>
+    </div>
+
+    <!-- 排行榜界面 -->
+    <div class="screen hidden" id="leaderboard-screen">
+      <div class="leaderboard-container">
+        <h2>排行榜</h2>
+        <div class="leaderboard-table">
+          <div class="leaderboard-header">
+            <div class="rank-col">排名</div>
+            <div class="name-col">名称</div>
+            <div class="score-col">分数</div>
+            <div class="lines-col">行数</div>
+          </div>
+          <div class="leaderboard-body" id="leaderboard-body">
+            <!-- 排行榜数据将在这里显示 -->
+          </div>
+        </div>
+        <button class="btn" id="leaderboard-back-btn">返回</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 音频资源 -->
+  <audio id="move-sound" src="assets/audio/move.mp3" preload="auto"></audio>
+  <audio id="rotate-sound" src="assets/audio/rotate.mp3" preload="auto"></audio>
+  <audio id="drop-sound" src="assets/audio/drop.mp3" preload="auto"></audio>
+  <audio id="clear-sound" src="assets/audio/clear.mp3" preload="auto"></audio>
+  <audio id="gameover-sound" src="assets/audio/gameover.mp3" preload="auto"></audio>
+  <audio id="background-music" src="assets/audio/background.mp3" preload="auto" loop></audio>
+
+  <!-- JavaScript 文件 -->
+  <script src="js/tetromino.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/controller.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html> 
